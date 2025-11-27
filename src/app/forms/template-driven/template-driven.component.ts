@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Form, NgForm } from '@angular/forms';
 
 @Component({
   selector: 'app-template-driven',
@@ -6,5 +7,7 @@ import { Component } from '@angular/core';
   styleUrl: './template-driven.component.scss'
 })
 export class TemplateDrivenComponent {
-
+  onSubmit(contactForm: NgForm) {
+    console.log(contactForm.value);
+  }
 }
