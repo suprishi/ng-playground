@@ -1,10 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { MenuItem } from './menu-item.model';
-import { FlatTreeControl } from '@angular/cdk/tree';
-import {
-  MatTreeFlatDataSource,
-  MatTreeFlattener,
-} from '@angular/material/tree';
+import { Router } from '@angular/router';
 
 /** Flat node with expandable and level information */
 interface ExampleFlatNode {
@@ -20,6 +16,7 @@ interface ExampleFlatNode {
   styleUrl: './menu.component.scss',
 })
 export class MenuComponent {
+  router = inject(Router);
   menu: MenuItem[] = [
     {
       name: 'Observables',
@@ -50,32 +47,8 @@ export class MenuComponent {
       ],
     },
   ];
-  private _transformer = (node: MenuItem, level: number) => {
-    return {
-      expandable: !!node.children && node.children.length > 0,
-      name: node.name,
-      route: node.route,
-      level: level,
-    };
-  };
 
-  treeControl = new FlatTreeControl<ExampleFlatNode>(
-    (node) => node.level,
-    (node) => node.expandable
-  );
-
-  treeFlattener = new MatTreeFlattener(
-    this._transformer,
-    (node) => node.level,
-    (node) => node.expandable,
-    (node) => node.children
-  );
-
-  dataSource = new MatTreeFlatDataSource(this.treeControl, this.treeFlattener);
-
-  constructor() {
-    this.dataSource.data = this.menu;
+  navigateTo(menuItemSection: MenuItem) {
+    this.router.navigate([menuItemSection.route]);
   }
-
-  hasChild = (_: number, node: ExampleFlatNode) => node.expandable;
 }
